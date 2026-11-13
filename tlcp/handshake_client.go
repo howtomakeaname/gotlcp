@@ -147,6 +147,9 @@ func (c *Conn) makeClientHello() (*clientHelloMsg, error) {
 			sigAlg == ECC_SM4_CBC_SM3 ||
 			sigAlg == ECC_SM4_GCM_SM3 {
 			hello.supportedSignatureAlgorithms = []SignatureScheme{SM2WithSM3}
+			if config.EnableRFC8998SM2Code {
+				hello.supportedSignatureAlgorithms = append(hello.supportedSignatureAlgorithms, SignatureScheme(0x0708))
+			}
 			break
 		}
 	}

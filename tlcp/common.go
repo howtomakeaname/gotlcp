@@ -350,6 +350,11 @@ func (c *CertificateRequestInfo) Context() context.Context {
 //
 // Config 根据情况可以复用。
 type Config struct {
+	// EnableRFC8998SM2Code additionally advertises 0x0708 for SM2/SM3.
+	// Some TLCP peers use that TLS 1.3 registry code instead of 0x0704.
+	// Both identifiers select the same SM2/SM3 primitive; verification is unchanged.
+	EnableRFC8998SM2Code bool
+
 	// Rand 外部随机源，若不配置则默认使用 crypto/rand 作为随机源
 	// 随机源必须线程安全，能够被多goroutines访问。
 	Rand io.Reader
@@ -571,6 +576,7 @@ func (c *Config) Clone() *Config {
 		DynamicRecordSizingDisabled: c.DynamicRecordSizingDisabled,
 		OnAlert:                     c.OnAlert,
 		EnableDebug:                 c.EnableDebug,
+		EnableRFC8998SM2Code:        c.EnableRFC8998SM2Code,
 		TrustedCAIndications:        c.TrustedCAIndications,
 		IBCIdentity:                 c.IBCIdentity.Clone(),
 		GetIBCIdentity:              c.GetIBCIdentity,
